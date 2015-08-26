@@ -1,4 +1,4 @@
-package master.netty.client;
+package master.netty.api.client;
 
 public class HttpClient {
 
