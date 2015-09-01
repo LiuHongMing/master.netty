@@ -12,7 +12,7 @@ public class NioHttpServerHandler extends SimpleChannelInboundHandler<FullHttpRe
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, FullHttpRequest msg) throws Exception {
-
+        
     }
 
 }
