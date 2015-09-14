@@ -6,22 +6,19 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.codec.http.HttpRequestDecoder;
 import io.netty.handler.codec.http.HttpRequestEncoder;
+import io.netty.handler.codec.http.HttpResponseEncoder;
 
 public class NioHttpServerInitializer extends ChannelInitializer<SocketChannel> {
 
-    private boolean enableSSL;
-
-    public NioHttpServerInitializer(boolean enableSSL) {
-        this.enableSSL = enableSSL;
+    public NioHttpServerInitializer() {
     }
 
     @Override
     protected void initChannel(SocketChannel ch) throws Exception {
 
         ChannelPipeline pipeline = ch.pipeline();
-        pipeline.addLast("encoder", new HttpRequestEncoder());
+        pipeline.addLast("encoder", new HttpResponseEncoder());
         pipeline.addLast("decoder", new HttpRequestDecoder());
-        pipeline.addLast("aggregator", new HttpObjectAggregator(65535));
         pipeline.addLast("handler", new NioHttpServerHandler());
 
     }

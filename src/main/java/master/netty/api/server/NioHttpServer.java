@@ -17,30 +17,25 @@ public class NioHttpServer {
     private static final Integer DEFAULT_LISTENING_PORT = 8080;
 
     private int port;
-    private boolean enableSSL = false;
 
     public NioHttpServer() {
-        this(DEFAULT_LISTENING_PORT, false);
+        this(DEFAULT_LISTENING_PORT);
     }
 
-    public NioHttpServer(int port) throws IllegalArgumentException {
-        this(port, false);
-    }
-
-    public NioHttpServer(int port, boolean enableSSL) {
+    public NioHttpServer(int port) {
         Preconditions.checkArgument(allowingPortRange.contains(port), "port(%s) is out of range %s", port, allowingPortRange);
         this.port = port;
-        this.enableSSL = enableSSL;
     }
 
     public void start() throws Exception {
         EventLoopGroup bossGroup = new NioEventLoopGroup();
         EventLoopGroup workGroup = new NioEventLoopGroup();
+
         try {
             ServerBootstrap serverBootstrap = new ServerBootstrap();
             serverBootstrap.group(bossGroup, workGroup)
                     .channel(NioServerSocketChannel.class)
-                    .childHandler(new NioHttpServerInitializer(enableSSL()))
+                    .childHandler(new NioHttpServerInitializer())
                     .option(ChannelOption.SO_BACKLOG, 128)
                     .childOption(ChannelOption.SO_KEEPALIVE, true);
 
@@ -52,11 +47,8 @@ public class NioHttpServer {
         }
     }
 
-    public boolean enableSSL() {
-        return enableSSL;
-    }
-
-    public static void main(String[] args) {
-
+    public static void main(String[] args) throws Exception {
+        NioHttpServer httpServer = new NioHttpServer();
+        httpServer.start();
     }
 }
