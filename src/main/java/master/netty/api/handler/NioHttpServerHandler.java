@@ -18,7 +18,10 @@ public class NioHttpServerHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
 
+        System.out.println(msg);
+
         if (msg instanceof HttpRequest) {
+            System.out.println("HttpRequest：" + msg);
             HttpRequest request = (HttpRequest) msg;
             if (HttpHeaders.isContentLengthSet(request)) {
                 long length = HttpHeaders.getContentLength(request);
@@ -27,6 +30,8 @@ public class NioHttpServerHandler extends ChannelInboundHandlerAdapter {
         }
 
         if (msg instanceof HttpContent) {
+            System.out.println("HttpContent：" + msg);
+
             HttpContent httpContent = (HttpContent) msg;
             ByteBuf content = httpContent.content();
 
@@ -40,17 +45,17 @@ public class NioHttpServerHandler extends ChannelInboundHandlerAdapter {
 
                 String resultContent = new String(contentByte);
                 System.out.println("RequestContent：" + resultContent);
-
-                FullHttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.OK,
-                        Unpooled.wrappedBuffer("It's ok".getBytes()));
-                response.headers().add(HttpHeaders.Names.CONTENT_TYPE, "text/plain");
-                response.headers().add(HttpHeaders.Names.CONTENT_LENGTH, response.content().readableBytes());
-                response.headers().add(HttpHeaders.Names.CONNECTION, HttpHeaders.Values.KEEP_ALIVE);
-
-                ctx.write(response);
-                ctx.flush();
             }
         }
+
+        FullHttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.OK,
+                Unpooled.wrappedBuffer("It's ok".getBytes()));
+        response.headers().add(HttpHeaders.Names.CONTENT_TYPE, "text/plain");
+        response.headers().add(HttpHeaders.Names.CONTENT_LENGTH, response.content().readableBytes());
+        response.headers().add(HttpHeaders.Names.CONNECTION, HttpHeaders.Values.KEEP_ALIVE);
+
+        ctx.write(response);
+        ctx.flush();
     }
 
     @Override
