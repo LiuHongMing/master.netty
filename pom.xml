@@ -6,7 +6,7 @@
 
     <groupId>master</groupId>
     <artifactId>netty</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.1</version>
 
     <description>Proficient in Netty, the conquest of Netty</description>
 
@@ -76,20 +76,6 @@
             </plugins>
         </pluginManagement>
     </build>
-
-    <!-- 发布 -->
-    <!--<distributionManagement>
-        <repository>
-            <id>releases</id>
-            <name>Releases Repository</name>
-            <url>http://localhost:8081/nexus/content/repositories/releases</url>
-        </repository>
-        <snapshotRepository>
-            <id>snapshots</id>
-            <name>Snapshot Repository</name>
-            <url>http://localhost:8081/nexus/content/repositories/snapshots</url>
-        </snapshotRepository>
-    </distributionManagement>-->
 
     <!-- 依赖 -->
     <dependencies>
