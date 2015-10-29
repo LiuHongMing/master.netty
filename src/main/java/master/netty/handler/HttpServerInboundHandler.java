@@ -1,35 +1,59 @@
-package master.netty.api.handler;
+package master.netty.handler;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
-import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.*;
+import io.netty.util.CharsetUtil;
 import io.netty.util.internal.logging.InternalLogger;
 import io.netty.util.internal.logging.InternalLoggerFactory;
 
-public class NioHttpServerHandler extends ChannelInboundHandlerAdapter {
+public class HttpServerInboundHandler extends ChannelInboundHandlerAdapter {
 
-    private static final InternalLogger LOGGER = InternalLoggerFactory.getInstance(NioHttpServerHandler.class);
+    private static final InternalLogger LOGGER = InternalLoggerFactory.getInstance(HttpServerInboundHandler.class);
 
     private ByteBuf reader = null;
+
+    private HttpRequest request;
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
 
-        // System.out.println(msg);
-
         if (msg instanceof HttpRequest) {
-            System.out.println("HttpRequest：" + msg);
+           /* System.out.println("HttpRequest：" + msg);
             HttpRequest request = (HttpRequest) msg;
             if (HttpHeaders.isContentLengthSet(request)) {
                 long length = HttpHeaders.getContentLength(request);
                 reader = Unpooled.buffer((int) length);
-            }
+            }*/
+
+            request = (HttpRequest) msg;
+            String uri = request.getUri();
+            System.out.println("Request uri:" + uri);
         }
 
         if (msg instanceof HttpContent) {
+            HttpContent content = (HttpContent) msg;
+            ByteBuf buf = content.content();
+            System.out.println(buf.toString(CharsetUtil.UTF_8));
+            buf.release();
+
+            String res = "I am ok!";
+            FullHttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1,
+                    HttpResponseStatus.OK, Unpooled.wrappedBuffer(res.getBytes()));
+            response.headers().set(HttpHeaders.Names.CONTENT_TYPE, "text/plain");
+            response.headers().set(HttpHeaders.Names.CONTENT_LENGTH, response.content().readableBytes());
+
+            if (HttpHeaders.isKeepAlive(request)) {
+                response.headers().set(HttpHeaders.Names.CONNECTION, HttpHeaders.Values.KEEP_ALIVE);
+            }
+
+            ctx.write(response);
+            ctx.flush();
+        }
+
+        /*if (msg instanceof HttpContent) {
             System.out.println("HttpContent：" + msg);
 
             HttpContent httpContent = (HttpContent) msg;
@@ -55,12 +79,18 @@ public class NioHttpServerHandler extends ChannelInboundHandlerAdapter {
                 ctx.write(response);
                 ctx.flush();
             }
-        }
+        }*/
     }
 
     @Override
     public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
-        LOGGER.info("NioHttpServerHandler.channelReadComplete");
+        LOGGER.info("HttpServerInboundHandler.channelReadComplete");
         ctx.flush();
+    }
+
+    @Override
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+        super.exceptionCaught(ctx, cause);
+        ctx.close();
     }
 }

@@ -1,28 +1,26 @@
-package master.netty.api.server;
+package master.netty.server;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Range;
 import io.netty.bootstrap.ServerBootstrap;
-import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-import master.netty.api.handler.NioHttpServerInitializer;
 
-public class NioHttpServer {
+public class HttpServer {
 
     private static final Range<Integer> allowingPortRange = Range.closed(1000, 65535);
-    private static final Integer DEFAULT_LISTENING_PORT = 8080;
+    private static final Integer DEFAULT_LISTENING_PORT = 8844;
 
     private int port;
 
-    public NioHttpServer() {
+    public HttpServer() {
         this(DEFAULT_LISTENING_PORT);
     }
 
-    public NioHttpServer(int port) {
+    public HttpServer(int port) {
         Preconditions.checkArgument(allowingPortRange.contains(port), "port(%s) is out of range %s", port, allowingPortRange);
         this.port = port;
     }
@@ -35,7 +33,7 @@ public class NioHttpServer {
             ServerBootstrap serverBootstrap = new ServerBootstrap();
             serverBootstrap.group(bossGroup, workGroup)
                     .channel(NioServerSocketChannel.class)
-                    .childHandler(new NioHttpServerInitializer())
+                    .childHandler(new HttpInitializer())
                     .option(ChannelOption.SO_BACKLOG, 128)
                     .childOption(ChannelOption.SO_KEEPALIVE, true);
 
@@ -48,7 +46,7 @@ public class NioHttpServer {
     }
 
     public static void main(String[] args) throws Exception {
-        NioHttpServer httpServer = new NioHttpServer();
+        HttpServer httpServer = new HttpServer();
         httpServer.start();
     }
 }
