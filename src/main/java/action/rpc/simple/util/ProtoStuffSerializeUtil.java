@@ -55,8 +55,8 @@ public class ProtoStuffSerializeUtil {
             throw new RuntimeException("反序列化对象: byte[]为空!");
         }
         try {
-            //T obj = objenesis.newInstance(targetClass);
-            T obj = targetClass.newInstance();
+//            T obj = targetClass.newInstance();
+            T obj = objenesis.newInstance(targetClass);
             Schema schema = getSchema(targetClass);
             ProtostuffIOUtil.mergeFrom(data, obj, schema);
             return obj;
