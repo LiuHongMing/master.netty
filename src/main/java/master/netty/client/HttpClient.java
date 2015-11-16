@@ -17,7 +17,6 @@ public class HttpClient {
 
     public void connect(String host, int port) throws Exception {
         EventLoopGroup workGroup = new NioEventLoopGroup();
-
         try {
             Bootstrap clientBootstrap = new Bootstrap();
             clientBootstrap.group(workGroup).channel(NioSocketChannel.class).handler(new ChannelInitializer<SocketChannel>() {

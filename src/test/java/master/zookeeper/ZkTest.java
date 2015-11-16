@@ -11,7 +11,9 @@ import org.junit.Test;
 
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CountDownLatch;
 
+import static org.apache.zookeeper.Watcher.Event.KeeperState.SyncConnected;
 import static org.apache.zookeeper.ZooDefs.Ids.OPEN_ACL_UNSAFE;
 
 public class ZkTest {
@@ -21,6 +23,8 @@ public class ZkTest {
     static Joiner getJoiner(String separator) {
         return Joiner.on(separator);
     }
+
+    CountDownLatch latch = new CountDownLatch(1);
 
     static Map getStatMap(Stat stat) {
         Map map = Maps.newHashMap();
@@ -49,23 +53,25 @@ public class ZkTest {
             public void process(WatchedEvent event) {
                 System.out.printf("Watcher回调: path=%s, type=%s, keeperState=%s\n",
                         event.getPath(), event.getType(), event.getState());
+                if (event.getState() == SyncConnected) {
+                    latch.countDown();
+                }
             }
         });
 
+        latch.await();
+
         Stat stat = null;
+        String createPath = null;
 
         System.out.println("---------------");
 
-        /*List<String> childs = zk.getChildren("/root", true);
-        for (String child : childs) {
-            System.out.printf("child:%s\n", child);
-        }*/
-
         stat = zk.exists("/root", true);
         if (null != stat) {
+            // 存在子节点时无法删除
             zk.delete("/root", -1);
         }
-        String createPath = zk.create("/root", "mydata".getBytes(), OPEN_ACL_UNSAFE, CreateMode.PERSISTENT);
+        createPath = zk.create("/root", "mydata".getBytes(), OPEN_ACL_UNSAFE, CreateMode.PERSISTENT);
         System.out.printf("stat: %s, path: %s\n", statJoiner.join(getStatMap(stat)), createPath);
 
         System.out.println("---------------");
@@ -74,7 +80,7 @@ public class ZkTest {
         if (null != stat) {
             zk.delete("/root/childone", stat.getVersion());
         }
-        createPath = zk.create("/root/childone", "childone".getBytes(), OPEN_ACL_UNSAFE, CreateMode.PERSISTENT);
+        createPath = zk.create("/root/childone", "childone".getBytes(), OPEN_ACL_UNSAFE, CreateMode.EPHEMERAL);
         System.out.printf("stat: %s, path: %s\n", statJoiner.join(getStatMap(stat)), createPath);
 
         System.out.println("---------------");
