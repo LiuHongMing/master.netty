@@ -26,6 +26,7 @@
         <commons-io.version>2.4</commons-io.version>
         <commons-collections.version>3.2.1</commons-collections.version>
         <google.guava.version>18.0</google.guava.version>
+        <google.gson.version>2.3</google.gson.version>
         <joda.version>2.3</joda.version>
         <junit.version>4.11</junit.version>
         <netty.version>4.0.28.Final</netty.version>
@@ -149,6 +150,11 @@
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
             <version>${google.guava.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>${google.gson.version}</version>
         </dependency>
 
         <!-- joda -->

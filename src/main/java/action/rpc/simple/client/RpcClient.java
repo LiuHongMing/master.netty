@@ -43,10 +43,10 @@ public class RpcClient extends SimpleChannelInboundHandler<RpcResponse> {
             });
             ChannelFuture future = bootstrap.connect(host, port).sync();
             future.channel().writeAndFlush(request).sync();
+
             synchronized (obj) {
                 obj.wait();
             }
-
 
             if (response != null) {
                 future.channel().closeFuture().sync();

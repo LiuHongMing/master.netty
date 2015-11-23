@@ -1,11 +1,11 @@
 package action.rpc.simple.util;
 
-import com.google.common.collect.Maps;
 import io.protostuff.LinkedBuffer;
 import io.protostuff.ProtobufIOUtil;
 import io.protostuff.ProtostuffIOUtil;
 import io.protostuff.Schema;
 import io.protostuff.runtime.RuntimeSchema;
+import com.google.common.collect.Maps;
 import org.springframework.objenesis.Objenesis;
 import org.springframework.objenesis.ObjenesisStd;
 
@@ -55,7 +55,7 @@ public class ProtoStuffSerializeUtil {
             throw new RuntimeException("反序列化对象: byte[]为空!");
         }
         try {
-//            T obj = targetClass.newInstance();
+            // T obj = targetClass.newInstance();
             T obj = objenesis.newInstance(targetClass);
             Schema schema = getSchema(targetClass);
             ProtostuffIOUtil.mergeFrom(data, obj, schema);
