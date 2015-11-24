@@ -36,7 +36,7 @@ public class ProtoStuffSerializeUtil {
 
     public static <T> byte[] serialize(T obj) {
         if (obj == null) {
-            throw new RuntimeException("序列化对象: obj == null");
+            throw new RuntimeException("obj == null");
         }
         Schema schema = getSchema(obj.getClass());
         LinkedBuffer buffer = LinkedBuffer.allocate(LinkedBuffer.DEFAULT_BUFFER_SIZE);
@@ -52,10 +52,9 @@ public class ProtoStuffSerializeUtil {
 
     public static <T> T deserialize(byte[] data, Class<T> targetClass) {
         if (data == null || data.length == 0) {
-            throw new RuntimeException("反序列化对象: byte[]为空!");
+            throw new RuntimeException("byte[] is empty");
         }
         try {
-            // T obj = targetClass.newInstance();
             T obj = objenesis.newInstance(targetClass);
             Schema schema = getSchema(targetClass);
             ProtostuffIOUtil.mergeFrom(data, obj, schema);
