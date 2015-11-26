@@ -1,5 +1,6 @@
 package master.netty.codec;
 
+import action.rpc.simple.util.HessianUtil;
 import action.rpc.simple.util.ProtoStuffSerializeUtil;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -16,9 +17,9 @@ public class RpcEncoder extends MessageToByteEncoder {
     @Override
     protected void encode(ChannelHandlerContext ctx, Object in, ByteBuf out) throws Exception {
         if (genericClass.isInstance(in)) {
-            byte[] datas = ProtoStuffSerializeUtil.serialize(in);
-            out.writeInt(datas.length);
-            out.writeBytes(datas);
+            byte[] data = HessianUtil.serialize(in);
+            out.writeInt(data.length);
+            out.writeBytes(data);
         }
     }
 

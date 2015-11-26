@@ -1,9 +1,12 @@
 package action.rpc.simple.server;
 
+import java.io.Serializable;
+
 /**
- * Created by liuhongming on 11/9/2015.
+ *
+ * @author J.Ming
  */
-public class RpcRequest {
+public class RpcRequest implements Serializable {
 
     private String requestId;
     private String className;

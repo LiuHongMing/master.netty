@@ -1,5 +1,6 @@
 package master.netty.codec;
 
+import action.rpc.simple.util.HessianUtil;
 import action.rpc.simple.util.ProtoStuffSerializeUtil;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -34,7 +35,7 @@ public class RpcDecoder extends ByteToMessageDecoder {
         byte[] data = new byte[dataLength];
         in.readBytes(data);
 
-        Object obj = ProtoStuffSerializeUtil.deserialize(data, genericClass);
+        Object obj = HessianUtil.deserialize(data);
 
         out.add(obj);
     }

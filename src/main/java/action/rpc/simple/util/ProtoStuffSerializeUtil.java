@@ -47,7 +47,6 @@ public class ProtoStuffSerializeUtil {
         } finally {
             buffer.clear();
         }
-
     }
 
     public static <T> T deserialize(byte[] data, Class<T> targetClass) {
