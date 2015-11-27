@@ -1,14 +1,18 @@
 package master.netty.codec;
 
 import action.rpc.simple.util.HessianUtil;
-import action.rpc.simple.util.ProtoStuffSerializeUtil;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class RpcDecoder extends ByteToMessageDecoder {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(RpcDecoder.class);
 
     private Class genericClass;
 
@@ -35,8 +39,9 @@ public class RpcDecoder extends ByteToMessageDecoder {
         byte[] data = new byte[dataLength];
         in.readBytes(data);
 
-        Object obj = HessianUtil.deserialize(data);
+        LOGGER.info("{}", Arrays.toString(data));
 
+        Object obj = HessianUtil.deserialize(data);
         out.add(obj);
     }
 }

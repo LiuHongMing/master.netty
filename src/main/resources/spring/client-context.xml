@@ -11,7 +11,7 @@
         <constructor-arg value="${registry.address}" />
     </bean>
 
-    <bean id="rpcProxy" class="action.rpc.simple.client.RpcProxy">
+    <bean id="rpcProxy" class="action.rpc.simple.client.RpcProxy" scope="singleton">
         <constructor-arg name="serviceDiscovery" ref="serviceDiscovery"/>
     </bean>
 

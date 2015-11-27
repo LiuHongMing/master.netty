@@ -48,6 +48,8 @@ public class RpcClient extends SimpleChannelInboundHandler<RpcResponse> {
                 obj.wait();
             }
 
+            LOGGER.info("Return response:{}", String.valueOf(response));
+
             if (response != null) {
                 future.channel().closeFuture().sync();
             }

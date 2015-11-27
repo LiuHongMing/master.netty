@@ -1,9 +1,8 @@
 package action.rpc.simple.server;
 
-/**
- * Created by liuhongming on 11/9/2015.
- */
-public class RpcResponse {
+import java.io.Serializable;
+
+public class RpcResponse implements Serializable {
 
     private String requestId;
     private Throwable error;
@@ -42,5 +41,9 @@ public class RpcResponse {
 
     public void setIsError(boolean isError) {
         this.isError = isError;
+    }
+
+    public String toString() {
+        return requestId + "," + error + "," + result;
     }
 }

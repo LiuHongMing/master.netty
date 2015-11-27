@@ -80,7 +80,7 @@ public class ServiceDiscovery {
                 byte[] bytes = zk.getData(Constants.ZK_REGISTRY_PATH + "/" + node, false, null);
                 dataList.add(new String(bytes));
             }
-            LOGGER.debug("node data: {}", dataList);
+            LOGGER.debug("node data:{}", dataList);
             this.dataList = dataList;
         } catch (KeeperException | InterruptedException e) {
             LOGGER.error("", e);
