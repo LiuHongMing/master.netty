@@ -38,6 +38,8 @@
         <objenesis.version>2.2</objenesis.version>
         <slf4j-log4j12.verison>1.7.12</slf4j-log4j12.verison>
         <hessian.version>4.0.38</hessian.version>
+        <dubbo.version>2.4.11</dubbo.version>
+        <fastjson.verion>1.2.7</fastjson.verion>
 
         <!-- plugins -->
         <clean.plugin.version>2.4.1</clean.plugin.version>
@@ -166,6 +168,26 @@
             <version>${joda.version}</version>
         </dependency>
 
+        <!-- dubbo -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>dubbo</artifactId>
+            <version>${dubbo.version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>spring</artifactId>
+                    <groupId>org.springframework</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <!-- fastjson -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>${fastjson.verion}</version>
+        </dependency>
+
         <!-- zookeeper -->
         <dependency>
             <groupId>org.apache.zookeeper</groupId>
@@ -213,18 +235,6 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-jdbc</artifactId>
             <version>${spring.version}</version>
-        </dependency>
-
-        <!-- protostuff -->
-        <dependency>
-            <groupId>io.protostuff</groupId>
-            <artifactId>protostuff-core</artifactId>
-            <version>${protostuff.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.protostuff</groupId>
-            <artifactId>protostuff-runtime</artifactId>
-            <version>${protostuff.version}</version>
         </dependency>
 
         <!-- hessian -->
