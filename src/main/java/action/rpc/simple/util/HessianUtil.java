@@ -1,9 +1,6 @@
 package action.rpc.simple.util;
 
-import com.caucho.hessian.io.Hessian2Input;
-import com.caucho.hessian.io.Hessian2Output;
-import com.caucho.hessian.io.HessianInput;
-import com.caucho.hessian.io.HessianOutput;
+import com.caucho.hessian.io.*;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -18,6 +15,8 @@ import java.io.IOException;
  */
 public class HessianUtil {
 
+    private static final SerializerFactory _serializerFactory = new SerializerFactory();
+
     /**
      * 序列化
      *
@@ -31,9 +30,10 @@ public class HessianUtil {
 
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         Hessian2Output h2o = new Hessian2Output(os);
+        h2o.setSerializerFactory(_serializerFactory);
         try {
             h2o.writeObject(obj);
-            h2o.flushBuffer();
+            h2o.flush();
         } finally {
             h2o.close();
         }
