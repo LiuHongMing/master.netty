@@ -30,8 +30,12 @@ public class HessianUtil {
         if (obj == null) throw new NullPointerException();
 
         ByteArrayOutputStream os = new ByteArrayOutputStream();
-        HessianOutput ho = new HessianOutput(os);
-        ho.writeObject(obj);
+        Hessian2Output ho = new Hessian2Output(os);
+        try {
+            ho.writeObject(obj);
+        } finally {
+            ho.close();
+        }
         return os.toByteArray();
     }
 
@@ -46,8 +50,12 @@ public class HessianUtil {
         if (data == null || data.length == 0) throw new NullPointerException();
 
         ByteArrayInputStream is = new ByteArrayInputStream(data);
-        HessianInput hi = new HessianInput(is);
-        return hi.readObject();
+        Hessian2Input hi = new Hessian2Input(is);
+        try {
+            return hi.readObject();
+        } finally {
+            hi.close();
+        }
     }
 
 }

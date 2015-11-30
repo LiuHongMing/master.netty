@@ -38,7 +38,7 @@ public class SerializationTest {
     public void testSerializeDeserialize() throws Exception {
         RequestDomain request = service.getStatus(200);
         byte[] data = HessianUtil.serialize(request);
-        RpcRequest result = (RpcRequest) HessianUtil.deserialize(data);
+        RequestDomain result = (RequestDomain) HessianUtil.deserialize(data);
 
         // TODO(特殊或复杂类型需要转换)
         // 异常：Attempted to serialize java.lang.Class: java.lang.String. Forgot to register a type adapter
