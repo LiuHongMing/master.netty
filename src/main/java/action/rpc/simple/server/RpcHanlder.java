@@ -1,5 +1,7 @@
 package action.rpc.simple.server;
 
+import action.rpc.simple.model.RpcRequest;
+import action.rpc.simple.model.RpcResponse;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;

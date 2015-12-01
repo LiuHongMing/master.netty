@@ -1,7 +1,7 @@
 package action.rpc.simple.client;
 
-import action.rpc.simple.server.RpcRequest;
-import action.rpc.simple.server.RpcResponse;
+import action.rpc.simple.model.RpcRequest;
+import action.rpc.simple.model.RpcResponse;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;

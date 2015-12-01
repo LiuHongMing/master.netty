@@ -1,7 +1,5 @@
 package action.rpc.simple;
 
-import action.rpc.simple.server.RpcRequest;
-import action.rpc.simple.server.RpcResponse;
 import action.rpc.simple.util.HessianUtil;
 import com.google.gson.*;
 import org.junit.Before;

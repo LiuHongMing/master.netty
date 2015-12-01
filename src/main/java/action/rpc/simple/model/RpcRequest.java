@@ -1,9 +1,8 @@
-package action.rpc.simple.server;
+package action.rpc.simple.model;
 
 import java.io.Serializable;
 
 /**
- *
  * @author J.Ming
  */
 public class RpcRequest implements Serializable {
