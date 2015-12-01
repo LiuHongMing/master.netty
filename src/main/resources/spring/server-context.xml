@@ -6,10 +6,17 @@
            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
     <context:component-scan base-package="action.rpc.simple.server"/>
-    <context:property-placeholder location="classpath:config.properties"/>
+    <!--<context:property-placeholder location="classpath:config.properties"/>-->
+
+    <!--自定义属性配置器，优先加载-->
+    <bean id="zkPropertyConfigurer" class="action.rpc.simple.util.ZkPropertyConfigurer">
+        <property name="location" value="classpath:config.properties"/>
+        <property name="order" value="1"/>
+        <property name="ignoreUnresolvablePlaceholders" value="true"/>
+    </bean>
 
     <bean id="serviceRegistry" class="action.rpc.simple.server.ServiceRegistry">
-        <constructor-arg name="registryAddress" value="${registry.address}" />
+        <constructor-arg name="registryAddress" value="${registry.address}"/>
     </bean>
 
     <bean id="rpcServer" class="action.rpc.simple.server.RpcServer">
