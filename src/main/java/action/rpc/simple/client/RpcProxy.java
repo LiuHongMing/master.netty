@@ -31,7 +31,7 @@ public class RpcProxy {
 
                 LOGGER.info("Method:{}", method.getName());
 
-                RpcRequest request = RpcModelBuilder.invokeMethod(method).build(args);
+                RpcRequest request = RpcModelBuilder.requestMethod(method).build(args);
 
                 if (serviceDiscovery != null) {
                     serverAddress = serviceDiscovery.discovery();

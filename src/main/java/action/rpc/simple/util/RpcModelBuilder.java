@@ -16,7 +16,7 @@ public class RpcModelBuilder {
         this.method = method;
     }
 
-    public static RpcModelBuilder invokeMethod(Method method) {
+    public static RpcModelBuilder requestMethod(Method method) {
         return new RpcModelBuilder(method);
     }
 
