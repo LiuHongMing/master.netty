@@ -59,8 +59,7 @@ public class ZkTest {
 
         latch.await();
 
-        Stat stat = null;
-        String createPath = null;
+        Stat stat;
 
         System.out.println("---------------");
 
