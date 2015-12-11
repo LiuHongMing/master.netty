@@ -8,7 +8,7 @@
 
     <dubbo:provider filter=""/>
 
-    <dubbo:application name="action-dubbo-provider"/>
+    <dubbo:application name="dubbo-provider"/>
 
     <dubbo:registry protocol="zookeeper" address="localhost:2181"/>
     <dubbo:protocol name="dubbo" port="20880"/>
