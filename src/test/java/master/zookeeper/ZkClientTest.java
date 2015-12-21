@@ -14,7 +14,7 @@ import static org.apache.zookeeper.AsyncCallback.*;
 import static org.apache.zookeeper.Watcher.Event.KeeperState.SyncConnected;
 import static org.apache.zookeeper.ZooDefs.Ids.OPEN_ACL_UNSAFE;
 
-public class ZkTest {
+public class ZkClientTest {
 
     public static final int ZK_SESSION_TIMEOUT = 50000;
 
