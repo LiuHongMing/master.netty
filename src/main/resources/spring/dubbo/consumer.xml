@@ -10,7 +10,7 @@
 
     <dubbo:application name="dubbo-consumer"/>
 
-    <dubbo:registry protocol="zookeeper" address="localhost:2181"/>
+    <dubbo:registry protocol="zookeeper" address="localhost:2181" client="curator"/>
 
     <dubbo:reference id="helloService" interface="action.rpc.simple.server.HelloService"/>
 

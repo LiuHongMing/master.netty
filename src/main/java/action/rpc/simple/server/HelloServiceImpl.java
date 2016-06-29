@@ -7,6 +7,9 @@ public class HelloServiceImpl implements HelloService {
 
     @Override
     public String hello(String name) {
+        if (name.equals("666")) {
+            return "I am 666";
+        }
         return "Hello! " + name;
     }
 
