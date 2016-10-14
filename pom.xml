@@ -23,7 +23,6 @@
         <javassist.version>3.15.0-GA</javassist.version>
         <asm.version>3.3.1</asm.version>
         <cglib.version>2.2</cglib.version>
-        <!--<cglib.version>3.2.0</cglib.version>-->
         <commons-lang3.version>3.4</commons-lang3.version>
         <commons-io.version>2.4</commons-io.version>
         <commons-collections.version>3.2.1</commons-collections.version>
@@ -34,7 +33,6 @@
         <netty.version>4.0.28.Final</netty.version>
         <zookeeper.version>3.4.5</zookeeper.version>
         <spring.version>4.2.2.RELEASE</spring.version>
-        <!--<objenesis.version>2.2</objenesis.version>-->
         <slf4j-log4j12.verison>1.7.12</slf4j-log4j12.verison>
         <hessian.version>4.0.38</hessian.version>
         <dubbo.version>2.4.10</dubbo.version>
@@ -203,13 +201,6 @@
             <artifactId>hessian</artifactId>
             <version>${hessian.version}</version>
         </dependency>
-
-        <!-- objenesis -->
-        <!--<dependency>-->
-            <!--<groupId>org.objenesis</groupId>-->
-            <!--<artifactId>objenesis</artifactId>-->
-            <!--<version>${objenesis.version}</version>-->
-        <!--</dependency>-->
 
         <!-- zookeeper -->
         <dependency>
