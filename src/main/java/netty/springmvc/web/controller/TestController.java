@@ -11,6 +11,7 @@ public class TestController {
 
     @RequestMapping("/test")
     public Object test() {
+//        int i = 1 / 0;
         Map map = new HashMap();
         map.put("hello", "world");
         return map;

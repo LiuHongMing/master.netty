@@ -38,6 +38,9 @@
     <dependencySets>
         <dependencySet>
             <outputDirectory>lib</outputDirectory>
+            <excludes>
+                <exclude>*:spring-test-*</exclude>
+            </excludes>
         </dependencySet>
     </dependencySets>
 

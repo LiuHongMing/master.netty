@@ -24,7 +24,7 @@ import java.util.List;
 
 /**
  * @ClassName: HttpServletHandler
- * @Description: Servlet
+ * @Description: Mock servlet
  */
 public class HttpServletHandler extends SimpleChannelInboundHandler<FullHttpRequest> {
 
@@ -38,6 +38,45 @@ public class HttpServletHandler extends SimpleChannelInboundHandler<FullHttpRequ
         this.servlet = servlet;
         this.servletContext = servlet.getServletConfig().getServletContext();
         this.charset = charset;
+    }
+
+    @Override
+    protected void channelRead0(ChannelHandlerContext channelHandlerContext, FullHttpRequest fullHttpRequest) throws Exception {
+        if (fullHttpRequest.getDecoderResult().isFailure()) {
+            printError(channelHandlerContext, HttpResponseStatus.BAD_REQUEST);
+            return;
+        }
+        MockHttpServletRequest  servletRequest  = createHttpRequest(fullHttpRequest);
+        MockHttpServletResponse servletResponse = new MockHttpServletResponse();
+
+        servlet.service(servletRequest, servletResponse);
+
+        HttpResponseStatus responseStatus = HttpResponseStatus.valueOf(servletResponse.getStatus());
+        HttpResponse response = new DefaultHttpResponse(HttpVersion.HTTP_1_1, responseStatus);
+
+        for (String name : servletResponse.getHeaderNames()) {
+            for (Object value : servletResponse.getHeaderValues(name)) {
+                response.headers().add(name, value);
+            }
+        }
+
+        byte[] responseContent = servletResponse.getContentAsByteArray();
+        if (response.getStatus().code() != HttpResponseStatus.OK.code()) {
+            responseContent = (response.getStatus().code() + response.getStatus().reasonPhrase() + "  errorMessage:" + servletResponse.getErrorMessage()).getBytes(charset);
+        }
+
+        channelHandlerContext.write(response);
+        InputStream inputStream = new ByteArrayInputStream(responseContent);
+        ChannelFuture channelFuture = channelHandlerContext.writeAndFlush(new ChunkedStream(inputStream));
+        channelFuture.addListener(ChannelFutureListener.CLOSE);
+    }
+
+    @Override
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+        cause.printStackTrace();
+        if (ctx.channel().isActive()) {
+            printError(ctx, HttpResponseStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     /**
@@ -70,8 +109,9 @@ public class HttpServletHandler extends SimpleChannelInboundHandler<FullHttpRequ
 
         //请求内容
         ByteBuf content = fullHttpRequest.content();
-        if (content != null && content.hasArray()) {
-            byte[] byteContent = content.array();
+        if (content != null && content.isReadable()) {
+            byte[] byteContent = new byte[content.readableBytes()];
+            content.readBytes(byteContent);
             servletRequest.setContent(byteContent);
         }
 
@@ -106,42 +146,4 @@ public class HttpServletHandler extends SimpleChannelInboundHandler<FullHttpRequ
         handlerContext.write(httpResponse).addListener(ChannelFutureListener.CLOSE);
     }
 
-    @Override
-    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-        cause.printStackTrace();
-        if (ctx.channel().isActive()) {
-            printError(ctx, HttpResponseStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    @Override
-    protected void channelRead0(ChannelHandlerContext channelHandlerContext, FullHttpRequest fullHttpRequest) throws Exception {
-        if (fullHttpRequest.getDecoderResult().isFailure()) {
-            printError(channelHandlerContext, HttpResponseStatus.BAD_REQUEST);
-            return;
-        }
-        MockHttpServletRequest  servletRequest  = createHttpRequest(fullHttpRequest);
-        MockHttpServletResponse servletResponse = new MockHttpServletResponse();
-
-        servlet.service(servletRequest, servletResponse);
-
-        HttpResponseStatus responseStatus = HttpResponseStatus.valueOf(servletResponse.getStatus());
-        HttpResponse response = new DefaultHttpResponse(HttpVersion.HTTP_1_1, responseStatus);
-
-        for (String name : servletResponse.getHeaderNames()) {
-            for (Object value : servletResponse.getHeaderValues(name)) {
-                response.headers().add(name, value);
-            }
-        }
-
-        byte[] responseContent = servletResponse.getContentAsByteArray();
-        if (response.getStatus().code() != HttpResponseStatus.OK.code()) {
-            responseContent = (response.getStatus().code() + response.getStatus().reasonPhrase() + "  errorMessage:" + servletResponse.getErrorMessage()).getBytes(charset);
-        }
-
-        channelHandlerContext.write(response);
-        InputStream inputStream = new ByteArrayInputStream(responseContent);
-        ChannelFuture channelFuture = channelHandlerContext.writeAndFlush(new ChunkedStream(inputStream));
-        channelFuture.addListener(ChannelFutureListener.CLOSE);
-    }
 }

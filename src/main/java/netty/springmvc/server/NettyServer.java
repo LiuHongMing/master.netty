@@ -1,6 +1,7 @@
 package netty.springmvc.server;
 
 import io.netty.bootstrap.ServerBootstrap;
+import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
@@ -48,7 +49,8 @@ public class NettyServer {
             bootstrap.group(new NioEventLoopGroup(), new NioEventLoopGroup());
             bootstrap.channel(NioServerSocketChannel.class)
                     .childHandler(new DispatcherServletChannelInitializer(charset, env, configLocation));
-            bootstrap.bind().sync().channel().closeFuture().sync();
+            ChannelFuture future = bootstrap.bind();
+            future.sync().channel().closeFuture().sync();
         } finally {
             group.shutdownGracefully();
         }
